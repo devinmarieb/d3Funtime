@@ -1,13 +1,5 @@
-// var Converter = require("csvtojson").Converter;
-// var converter = new Converter({});
-//
-// converter.fromFile("./achievement.csv",function(err,result){
-//  console.log(result);
-// });
 
-console.log(populationData);
-
-  var map = new Datamap({
+var map = new Datamap({
     element: document.getElementById('container'),
     scope: 'usa',
     fills: {
@@ -21,8 +13,6 @@ console.log(populationData);
       highlightFillColor: '#f1231d',
       popupOnHover: true,
       popupTemplate: function(geography, data){
-        console.log(geography.properties)
-        console.log(data);
         return '<div class="hoverinfo">'+geography.properties+'</div>'
       }
     },
@@ -49,5 +39,22 @@ function data(){
     }
   }
 }
+
+
+
+var dataByState = _.keyBy(populationData, "NAME");
+
+
+// var color = d3.scale.log()
+//     .range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"])
+//     .interpolate(d3.interpolateHcl);
+//
+// var densities = counties
+//         .map(function(d) { return d.properties.density = d.properties.pop / path.area(d); })
+//         .sort(function(a, b) { return a - b; });
+//
+// color.domain([d3.quantile(densities, .01), d3.quantile(densities, .99)]);
+//
+// console.log(color(20));
 
 map.updateChoropleth(data());
