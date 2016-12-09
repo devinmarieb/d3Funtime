@@ -1,3 +1,12 @@
+// var Converter = require("csvtojson").Converter;
+// var converter = new Converter({});
+//
+// converter.fromFile("./achievement.csv",function(err,result){
+//  console.log(result);
+// });
+
+console.log(populationData);
+
   var map = new Datamap({
     element: document.getElementById('container'),
     scope: 'usa',
@@ -26,6 +35,9 @@
 
 function data(){
   return {
+    CA: {
+      fillKey: 'LOW',
+    },
     NY: {
       fillKey: 'LOW',
     },
