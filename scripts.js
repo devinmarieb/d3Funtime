@@ -1,53 +1,71 @@
-// var Converter = require("csvtojson").Converter;
-// var converter = new Converter({});
-//
-// converter.fromFile("./achievement.csv",function(err,result){
-//  console.log(result);
-// });
+const birthrate = "RBIRTH2015"
+const deathrate = "RDEATH2015"
+const naturalIncreaseRate = "RNATURALINC2015"
+const netMigrationRate = "RNETMIG2015"
+const totalDeaths = "DEATHS2015"
+
+const dataSet = birthrate;
 
 console.log(populationData);
+var dataByState = _.keyBy(populationData, "NAME");
 
-  var map = new Datamap({
+dataByState = _.filter(dataByState, function(item){
+  return item.NAME.length < 3
+})
+
+var populationEst2015 = _.map(dataByState, function(state){
+  var stateName=state.NAME;
+  return {
+    state: state.NAME,
+    data: state[dataSet],
+  }
+});
+
+var max = _.maxBy(populationEst2015, function(object){
+  return object.data
+});
+
+var min = _.minBy(populationEst2015, function(object){
+  return object.data
+});
+
+var color = d3.scaleLinear()
+    .domain([min.data, max.data])
+    .range(["white", "darkGreen"]);
+
+var popByState = _.keyBy(populationEst2015, "state");
+
+var colorDataByState = _.map(popByState, function(item){
+  return {
+    state: item.state,
+    fill: color(item.data)
+  }
+})
+
+colorDataByState = _.keyBy(colorDataByState, "state")
+
+var mapColorData = _.mapValues(colorDataByState, function(item){
+  return item.fill
+});
+
+console.log(popByState);
+
+var map = new Datamap({
     element: document.getElementById('container'),
     scope: 'usa',
-    fills: {
-      HIGH: '#afafaf',
-      LOW: '#123456',
-      MEDIUM: 'blue',
-      UNKNOWN: 'rgb(0,0,0)',
-      defaultFill: 'green'
-    },
     geographyConfig: {
-      highlightFillColor: '#f1231d',
+      highlightFillColor: 'purple',
       popupOnHover: true,
       popupTemplate: function(geography, data){
-        console.log(geography.properties)
+        console.log(geography);
         console.log(data);
-        return '<div class="hoverinfo">'+geography.properties+'</div>'
-      }
+        return `<div class="hoverinfo">
+                  ${geography.properties.name}
+                  Data: ${data.data}
+                </div>`
+      },
     },
-    data:{
-      NY: {
-        test: 'hello',
-      }
-    }
+    data: popByState,
   });
 
-function data(){
-  return {
-    CA: {
-      fillKey: 'LOW',
-    },
-    NY: {
-      fillKey: 'LOW',
-    },
-    NJ: {
-      fillKey: 'MEDIUM',
-    },
-    CO: {
-      fillKey: 'HIGH',
-    }
-  }
-}
-
-map.updateChoropleth(data());
+map.updateChoropleth(mapColorData, {reset: false});
