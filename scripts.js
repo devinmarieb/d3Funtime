@@ -1,29 +1,10 @@
-
-// function data(){
-//   return {
-//     CA:
-//       fill: "rgb(70, 130, 180)",
-//     },
-//     NY: {
-//       fillKey:
-//           "rgb(159, 47, 51)",
-//     },
-//     NJ: {
-//       fillKey: 'MEDIUM',
-//     },
-//     CO: {
-//       fillKey: 'HIGH',
-//     }
-//   }
-// }
-
 const birthrate = "RBIRTH2015"
 const deathrate = "RDEATH2015"
 const naturalIncreaseRate = "RNATURALINC2015"
 const netMigrationRate = "RNETMIG2015"
 const totalDeaths = "DEATHS2015"
 
-const dataSet = netMigrationRate;
+const dataSet = birthrate;
 
 console.log(populationData);
 var dataByState = _.keyBy(populationData, "NAME");
